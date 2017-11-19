@@ -33,7 +33,7 @@ public class AlkZutatenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alk_zutaten);
 
-        ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_on);
+
 
 
         mStatusDB = FirebaseDatabase.getInstance().getReference().child("Alkohol");
