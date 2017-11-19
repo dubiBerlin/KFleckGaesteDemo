@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Knutschfleck Demo</string>
+    <string name="alcoholic_cocktail">alc</string>
+    <string name="non_alcoholic_cocktail">no alc</string>
+    <string name="key_main_activity">Key</string>
+</resources>

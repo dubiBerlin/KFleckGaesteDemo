@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="201dp"
+        android:layout_height="wrap_content"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textSize="16dp"
+            android:layout_marginTop="15dp"
+            android:id="@+id/zutatName"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            android:textSize="16dp"
+            android:textAlignment="center"
+            android:id="@+id/zutatMenge"
+            />
+
+
+
+    </LinearLayout>
+
+    <ImageButton
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:textAlignment="center"
+        android:id="@+id/starBtn"
+        android:src="@drawable/star_btn"
+        android:background="#00ffffff"
+
+        />
+</LinearLayout>
