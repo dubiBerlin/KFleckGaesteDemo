@@ -2,6 +2,7 @@ package com.dubravko.knutschfleck.knutschfleckdemo;
 
 
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,15 +22,18 @@ import java.util.List;
 public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHolder>{
 
     private List<Zutat> list;
-    // Sets the state of star_btn
-    private int starBtnIsEnable = -1;
     // We need a hashmap in order to save the state of the starbutton.
     // The key will be the position of the button
     private HashMap<Integer, Integer>map;
+    // we will show the amount of choosen liters in the action bar. so we need to import it from the activity
+    private ActionBar actionBar;
+    // saves the addition of choosen liters
+    private int amountOfLiter;
 
-    public ZutatAdapter(List<Zutat> list){
+    public ZutatAdapter(List<Zutat> list, ActionBar actionBar){
         this.list = list;
         map = new HashMap<Integer, Integer>();
+        this.actionBar = actionBar;
     }
 
 
@@ -42,7 +46,7 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
 
     @Override
     public void onBindViewHolder(final ZutatViewHolder holder, final int position){
-        Zutat zutat = list.get(position);
+        final Zutat zutat = list.get(position);
         holder.setZutatName(zutat.getName());
         holder.setZutatMenge(zutat.getLiter());
 
@@ -57,15 +61,16 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
 
                 map.put(Integer.valueOf(position), aktuellerStatus);
 
-                Toast.makeText(view.getContext(), "CLICK on position: "+position+" state: "+starBtnIsEnable, Toast.LENGTH_LONG).show();
+                String name = list.get(position).getName();
+                String liter = list.get(position).getLiter();
+
+                Toast.makeText(view.getContext(), name+" "+liter, Toast.LENGTH_LONG).show();
 
                 if(aktuellerStatus==1){
                     holder.starBtn.setImageDrawable(ContextCompat.getDrawable(view.getContext(),android.R.drawable.btn_star_big_on));
                 }else{
                     holder.starBtn.setImageDrawable(ContextCompat.getDrawable(view.getContext(),android.R.drawable.btn_star_big_off));
                 }
-
-
             }
         });
     }

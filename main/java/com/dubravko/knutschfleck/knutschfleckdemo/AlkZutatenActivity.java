@@ -1,7 +1,6 @@
 package com.dubravko.knutschfleck.knutschfleckdemo;
 
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,8 +32,8 @@ public class AlkZutatenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alk_zutaten);
 
-
-
+        //getSupportActionBar().setDisplayShowTitleEnabled(false);
+        //getSupportActionBar().setTitle("Was los ja?");
 
         mStatusDB = FirebaseDatabase.getInstance().getReference().child("Alkohol");
 
@@ -50,18 +49,9 @@ public class AlkZutatenActivity extends AppCompatActivity {
         zutaten = new ArrayList<>();
         getList();
         //zutaten = getStatusesList();
-        adapter = new ZutatAdapter(zutaten);
+        adapter = new ZutatAdapter(zutaten,getSupportActionBar());
         recyclerView.setAdapter(adapter);
 
-    }
-
-    private List<Zutat> getStatusesList(){
-        List<Zutat> list = new ArrayList<Zutat>();
-
-        for(int i = 0; i < 10; i++){
-            list.add(new Zutat("Wodka", "Liter_"+i));
-        }
-        return list;
     }
 
 
