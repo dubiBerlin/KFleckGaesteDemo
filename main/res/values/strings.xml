@@ -3,4 +3,7 @@
     <string name="alcoholic_cocktail">alc</string>
     <string name="non_alcoholic_cocktail">no alc</string>
     <string name="key_main_activity">Key</string>
+    <string name="kfleck_preference_file_key">kFleck_shared_preference</string>
+    <string name="shared_glas_size">glas_size</string>
+    <string name="shared_amount_liter">amount_liter</string>
 </resources>

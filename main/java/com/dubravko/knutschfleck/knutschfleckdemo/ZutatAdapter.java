@@ -1,6 +1,7 @@
 package com.dubravko.knutschfleck.knutschfleckdemo;
 
 
+import android.app.Activity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dubravko.knutschfleck.knutschfleckdemo.model.Zutat;
+import com.dubravko.knutschfleck.knutschfleckdemo.shared.SharedPreferenceClass;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,12 +30,19 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
     // we will show the amount of choosen liters in the action bar. so we need to import it from the activity
     private ActionBar actionBar;
     // saves the addition of choosen liters
-    private int amountOfLiter;
+    private double amountOfLiter  = 0;
 
-    public ZutatAdapter(List<Zutat> list, ActionBar actionBar){
+    private SharedPreferenceClass spc;
+    private String glasSize;
+
+    public ZutatAdapter(List<Zutat> list, ActionBar actionBar, Activity activity){
         this.list = list;
         map = new HashMap<Integer, Integer>();
         this.actionBar = actionBar;
+        spc = new SharedPreferenceClass(activity);
+        glasSize = spc.getGlasSize();
+
+        actionBar.setTitle(amountOfLiter+"/"+glasSize);
     }
 
 
@@ -55,6 +64,7 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
         holder.starBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
 
+                // is the star button selected or not
                 int aktuellerStatus = map.get(position);
 
                 aktuellerStatus = aktuellerStatus * (-1);
@@ -64,13 +74,33 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
                 String name = list.get(position).getName();
                 String liter = list.get(position).getLiter();
 
-                Toast.makeText(view.getContext(), name+" "+liter, Toast.LENGTH_LONG).show();
+
 
                 if(aktuellerStatus==1){
                     holder.starBtn.setImageDrawable(ContextCompat.getDrawable(view.getContext(),android.R.drawable.btn_star_big_on));
+                    amountOfLiter = amountOfLiter + Double.valueOf(liter);
+                    if(amountOfLiter<=Double.valueOf(glasSize)){
+                        actionBar.setTitle(amountOfLiter+"/"+glasSize);
+                    }else{
+                        Toast.makeText(view.getContext(), "Es passt nicht mehr in ihr Glas rein!", Toast.LENGTH_LONG).show();
+                        amountOfLiter = amountOfLiter - Double.valueOf(liter);
+                    }
                 }else{
                     holder.starBtn.setImageDrawable(ContextCompat.getDrawable(view.getContext(),android.R.drawable.btn_star_big_off));
+                    amountOfLiter = amountOfLiter - Double.valueOf(liter);
+
+                    if(amountOfLiter>=0){
+                        actionBar.setTitle(amountOfLiter+"/"+glasSize);
+                    }else{
+                        amountOfLiter = amountOfLiter + Double.valueOf(liter);
+                    }
+
                 }
+
+
+
+                // does the amount of liters fit into the choosen glas?
+
             }
         });
     }

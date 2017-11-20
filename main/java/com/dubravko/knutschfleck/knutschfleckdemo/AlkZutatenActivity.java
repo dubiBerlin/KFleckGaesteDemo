@@ -49,7 +49,7 @@ public class AlkZutatenActivity extends AppCompatActivity {
         zutaten = new ArrayList<>();
         getList();
         //zutaten = getStatusesList();
-        adapter = new ZutatAdapter(zutaten,getSupportActionBar());
+        adapter = new ZutatAdapter(zutaten,getSupportActionBar(), this);
         recyclerView.setAdapter(adapter);
 
     }
