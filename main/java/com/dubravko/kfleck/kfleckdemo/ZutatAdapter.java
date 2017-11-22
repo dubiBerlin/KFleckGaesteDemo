@@ -51,7 +51,7 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
         spc = new SharedPreferenceClass(activity);
         glasSize = Double.valueOf(spc.getGlasSize());
         starBtns = new ArrayList<StatusStarBtn>();
-
+        mapStarBtns = new HashMap<Integer, Integer>();
         // according to glassize we set max amount of choosen alc for user
         if(glasSize==0.3){
             maxLiter = 5.2;
@@ -82,32 +82,36 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
 
         // For every single item we will create an object which saves the position and the
         // state for the starbtn
-
-        if(!starBtnExists(position)){
+        /*if(!starBtnExists(position)){
             StatusStarBtn statusStarBtn = new StatusStarBtn(position, -1);
             starBtns.add(statusStarBtn);
+        }*/
+
+        // First we check if Key exists
+        if(!mapStarBtns.containsKey(Integer.valueOf(position))){
+            mapStarBtns.put(Integer.valueOf(position), Integer.valueOf(-1));
         }
+
         System.out.println("________________"+zutat.getName()+" "+zutat.getLiter()+" pos: "+position);
 
 
         holder.starBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-
-                System.out.println("___________________________________onClickListener pos:"+position+" aktueller Status: "+getStarBtnStatus(position)+" "+zutat.getName()+" "+zutat.getLiter());
+                                                                                                                        // getStarBtnStatus(position)
+                System.out.println("___________________________________onClickListener pos:"+position+" aktueller Status: "+mapStarBtns.get(position)+" "+zutat.getName()+" "+zutat.getLiter());
 
                 // is the star button selected or not
-               // int aktuellerStatus = (int)Integer.valueOf(map.get(position));
-                int aktuellerStatus = getStarBtnStatus(position);
+                int aktuellerStatus = mapStarBtns.get(Integer.valueOf(position)); //getStarBtnStatus(position);
                 aktuellerStatus = aktuellerStatus * (-1);
 
-                //map.put(Integer.valueOf(position), aktuellerStatus);
-                setStatus(position, aktuellerStatus);
+                mapStarBtns.put(Integer.valueOf(position), aktuellerStatus);
+                //setStatus(position, aktuellerStatus);
 
 
                 String name = list.get(position).getName();
                 String liter = list.get(position).getLiter();
 
-
+                // so the button is selected
                 if(aktuellerStatus==1){
                     holder.starBtn.setImageDrawable(ContextCompat.getDrawable(view.getContext(),android.R.drawable.btn_star_big_on));
 
@@ -141,7 +145,7 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
         });
     }
 
-    private int getStarBtnStatus(int position){
+/*    private int getStarBtnStatus(int position){
         System.out.println("getStarBtnStatus() pos: "+position);
         int status = 10;
         for(int i = 0; i < starBtns.size(); i++){
@@ -168,7 +172,7 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
             }
         }
         return false;
-    }
+    }*/
 
     @Override
     public int getItemCount() {
@@ -210,21 +214,6 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
             starBtn = (ImageButton)viewItem.findViewById(R.id.starBtn);
             zutatName = (TextView)viewItem.findViewById(R.id.zutatName);
             zutatMenge = (TextView)viewItem.findViewById(R.id.zutatMenge);
-
-
-            starBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    selected = !selected;
-                    if(selected){
-                        starBtn.setImageDrawable(ContextCompat.getDrawable(view.getContext(),android.R.drawable.btn_star_big_on));
-                    }
-                    else{
-                        starBtn.setImageDrawable(ContextCompat.getDrawable(view.getContext(),android.R.drawable.btn_star_big_off));
-                    }
-                }
-            });
-
 
         }
 
