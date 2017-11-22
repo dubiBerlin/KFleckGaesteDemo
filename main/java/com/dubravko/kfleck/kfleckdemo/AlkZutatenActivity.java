@@ -1,4 +1,4 @@
-package com.dubravko.knutschfleck.knutschfleckdemo;
+package com.dubravko.kfleck.kfleckdemo;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,7 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.dubravko.knutschfleck.knutschfleckdemo.model.Zutat;
+import com.dubravko.kfleck.kfleckdemo.model.Zutat;
+import com.dubravko.knutschfleck.knutschfleckdemo.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -46,14 +47,24 @@ public class AlkZutatenActivity extends AppCompatActivity {
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
 
+
         zutaten = new ArrayList<>();
         getList();
+        getList2();
+
+
         //zutaten = getStatusesList();
         adapter = new ZutatAdapter(zutaten,getSupportActionBar(), this);
         recyclerView.setAdapter(adapter);
 
     }
 
+    private void getList2(){
+        for(int i = 1; i < 20; i++){
+            Zutat zutat = new Zutat("ZapZarap"+i, "0.0"+i);
+            zutaten.add(zutat);
+        }
+    }
 
     /*  */
     private void getList(){
@@ -63,6 +74,7 @@ public class AlkZutatenActivity extends AppCompatActivity {
                 String key = dataSnapshot.getKey();
                 Zutat zutat = dataSnapshot.child(key).getValue(Zutat.class);
                 Log.i("FETCH----key: ",key);
+
 
 
 
@@ -77,7 +89,6 @@ public class AlkZutatenActivity extends AppCompatActivity {
 
                     String childKEy = snapshot.getKey();
                     String value = snapshot.getValue().toString();
-
                     if(i==0){
                         zt.setLiter(value);
                     }else{

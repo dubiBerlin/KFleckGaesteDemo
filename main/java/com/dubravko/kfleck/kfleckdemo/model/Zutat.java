@@ -1,4 +1,4 @@
-package com.dubravko.knutschfleck.knutschfleckdemo.model;
+package com.dubravko.kfleck.kfleckdemo.model;
 
 /**
  * Created by dp on 14.11.2017.
@@ -30,4 +30,6 @@ public class Zutat {
     public void setLiter(String liter) {
         this.liter = liter;
     }
+
+
 }

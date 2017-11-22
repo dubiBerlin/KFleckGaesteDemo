@@ -1,4 +1,4 @@
-package com.dubravko.knutschfleck.knutschfleckdemo.shared;
+package com.dubravko.kfleck.kfleckdemo.shared;
 
 import android.content.Context;
 import android.content.SharedPreferences;

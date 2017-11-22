@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_margin="10dp"
-    tools:context="com.dubravko.knutschfleck.knutschfleckdemo.GlasSizeActivity">
+    tools:context="com.dubravko.kfleck.kfleckdemo.GlasSizeActivity">
 
     <Button
         android:layout_width="match_parent"
