@@ -48,19 +48,20 @@ public class AlkZutatenActivity extends AppCompatActivity {
         linearLayoutManager.setStackFromEnd(true);
 
 
-        zutaten = new ArrayList<>();
+        zutaten = new ArrayList<Zutat>();
         getList();
         getList2();
 
 
         //zutaten = getStatusesList();
         adapter = new ZutatAdapter(zutaten,getSupportActionBar(), this);
+        recyclerView.setItemViewCacheSize(zutaten.size());
         recyclerView.setAdapter(adapter);
 
     }
 
     private void getList2(){
-        for(int i = 1; i < 20; i++){
+        for(int i = 1; i < 6; i++){
             Zutat zutat = new Zutat("ZapZarap"+i, "0.0"+i);
             zutaten.add(zutat);
         }

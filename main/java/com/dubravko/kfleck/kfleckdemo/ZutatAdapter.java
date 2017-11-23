@@ -44,17 +44,20 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
     private SharedPreferenceClass spc;
     private double glasSize;
 
+    private Activity activity;
 
     public ZutatAdapter(List<Zutat> list, ActionBar actionBar, Activity activity){
+
         this.list = list;
         this.actionBar = actionBar;
         spc = new SharedPreferenceClass(activity);
         glasSize = Double.valueOf(spc.getGlasSize());
         starBtns = new ArrayList<StatusStarBtn>();
         mapStarBtns = new HashMap<Integer, Integer>();
+        this.activity = activity;
         // according to glassize we set max amount of choosen alc for user
         if(glasSize==0.3){
-            maxLiter = 5.2;
+            maxLiter = 0.2;
         }else{
             if(glasSize==0.5){
                 maxLiter = 0.3;
@@ -86,13 +89,19 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
             StatusStarBtn statusStarBtn = new StatusStarBtn(position, -1);
             starBtns.add(statusStarBtn);
         }*/
-
+       // mapStarBtns.put(Integer.valueOf(position), -1);
         // First we check if Key exists
-        if(!mapStarBtns.containsKey(Integer.valueOf(position))){
-            mapStarBtns.put(Integer.valueOf(position), Integer.valueOf(-1));
+        if(!mapStarBtns.containsKey(position)){
+            mapStarBtns.put(position, -1);
         }
-
+        printMap(mapStarBtns);
         System.out.println("________________"+zutat.getName()+" "+zutat.getLiter()+" pos: "+position);
+
+        if(mapStarBtns.get(position)==-1){
+            holder.starBtn.setImageDrawable(ContextCompat.getDrawable(activity,android.R.drawable.btn_star_big_off));
+        } else {
+            holder.starBtn.setImageDrawable(ContextCompat.getDrawable(activity,android.R.drawable.btn_star_big_on));
+        }
 
 
         holder.starBtn.setOnClickListener(new View.OnClickListener() {
@@ -104,11 +113,11 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
                 int aktuellerStatus = mapStarBtns.get(Integer.valueOf(position)); //getStarBtnStatus(position);
                 aktuellerStatus = aktuellerStatus * (-1);
 
-                mapStarBtns.put(Integer.valueOf(position), aktuellerStatus);
+                mapStarBtns.put(position, aktuellerStatus);
                 //setStatus(position, aktuellerStatus);
 
 
-                String name = list.get(position).getName();
+                String name  = list.get(position).getName();
                 String liter = list.get(position).getLiter();
 
                 // so the button is selected
@@ -117,7 +126,6 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
 
                     // we are rounding the value
                     amountOfLiter = Helper.roundDouble(amountOfLiter + Double.valueOf(liter));
-
 
                     if(amountOfLiter<=maxLiter){
                         actionBar.setTitle(amountOfLiter+"/"+glasSize);
@@ -137,10 +145,8 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
                     }
                 }
 
-               // printMap(map);
-
+                printMap(mapStarBtns);
                 // does the amount of liters fit into the choosen glas?
-
             }
         });
     }
@@ -180,14 +186,12 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
     }
 
     public void printMap(Map mp) {
+        System.out.println("___________________PRINTHASHMAP_________________"+mp.size());
         Iterator it = mp.entrySet().iterator();
-        int i = 0;
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
-            String zutat = list.get(i).getName();
-            String liter = list.get(i).getLiter();
-            System.out.println(zutat+", "+liter+" "+pair.getKey() + " = " + pair.getValue());
-            it.remove(); // avoids a ConcurrentModificationException
+            System.out.println("KEY(Position): "+pair.getKey() + "  VALUE(Status):" + pair.getValue()+"   ITEM:"+list.get(Integer.valueOf(pair.getKey().toString())).getName()+"    "+list.get(Integer.valueOf(pair.getKey().toString())).getLiter());
+            //it.remove(); // avoids a ConcurrentModificationException
         }
     }
 
@@ -208,7 +212,7 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
 
 
         public ZutatViewHolder(View viewItem){
-            super(viewItem);
+             super(viewItem);
             this.view = viewItem;
 
             starBtn = (ImageButton)viewItem.findViewById(R.id.starBtn);
