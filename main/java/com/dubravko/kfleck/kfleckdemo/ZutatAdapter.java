@@ -38,6 +38,8 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
     private ActionBar actionBar;
     // saves the addition of choosen liters
     private double amountOfLiter  = 0;
+    // this will be used in order to save it in SharedPreference
+    private double amountOfLiterSave  = 0;
     // We will set a limit alcohol for every glas
     private double maxLiter;
 
@@ -66,6 +68,12 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
             }
         }
         actionBar.setTitle(amountOfLiter+"/"+glasSize);
+        actionBar.getCustomView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(view.getContext(), "Was geht leute?", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 
@@ -121,19 +129,18 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
                 String name  = list.get(position).getName();
                 String liter = list.get(position).getLiter();
 
-                // so the button is selected
+                // the button is selected
                 if(aktuellerStatus==1){
-                    holder.starBtn.setImageDrawable(ContextCompat.getDrawable(view.getContext(),android.R.drawable.btn_star_big_on));
-
-                    // we are rounding the value
-                    amountOfLiter = Helper.roundDouble(amountOfLiter + Double.valueOf(liter));
-
-                    if(amountOfLiter<=maxLiter){
+                    // did user
+                    if(Helper.roundDouble(amountOfLiter + Double.valueOf(liter))<=maxLiter){
+                        // we are rounding the value
+                        amountOfLiter = Helper.roundDouble(amountOfLiter + Double.valueOf(liter));
                         actionBar.setTitle(amountOfLiter+"/"+glasSize);
+                        holder.starBtn.setImageDrawable(ContextCompat.getDrawable(view.getContext(),android.R.drawable.btn_star_big_on));
                     }else{
+                        //if(amountOfLiter>maxLiter){
                         Toast.makeText(view.getContext(), "Mehr Alk geht leider nicht mehr", Toast.LENGTH_LONG).show();
-                        amountOfLiter = Helper.roundDouble(amountOfLiter - Double.valueOf(liter));
-                        holder.starBtn.setImageDrawable(ContextCompat.getDrawable(view.getContext(),android.R.drawable.btn_star_big_off));
+                        mapStarBtns.put(position, -1);
                     }
                 }else{
                     holder.starBtn.setImageDrawable(ContextCompat.getDrawable(view.getContext(),android.R.drawable.btn_star_big_off));
