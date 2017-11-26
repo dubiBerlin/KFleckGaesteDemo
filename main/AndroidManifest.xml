@@ -15,9 +15,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.dubravko.kfleck.kfleckdemo.GlasSizeActivity">
-        </activity>
-        <activity android:name="com.dubravko.kfleck.kfleckdemo.AlkZutatenActivity"></activity>
+        <activity android:name="com.dubravko.kfleck.kfleckdemo.GlasSizeActivity"></activity>
+        <activity android:name="com.dubravko.kfleck.kfleckdemo.AlkZutatenActivity" />
+        <activity android:name="com.dubravko.kfleck.kfleckdemo.NoAlkZutatenActivity"></activity>
     </application>
 
 </manifest>

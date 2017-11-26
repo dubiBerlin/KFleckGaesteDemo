@@ -1,10 +1,13 @@
 package com.dubravko.kfleck.kfleckdemo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.dubravko.kfleck.kfleckdemo.model.Zutat;
 import com.dubravko.knutschfleck.knutschfleckdemo.R;
@@ -65,6 +68,24 @@ public class AlkZutatenActivity extends AppCompatActivity {
             Zutat zutat = new Zutat("ZapZarap"+i, "0.0"+i);
             zutaten.add(zutat);
         }
+    }
+
+    // ActionBar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.next_button_layout, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+
+        switch(item.getItemId()){
+            case R.id.action_bar_next_btn:
+                startActivity(new Intent(AlkZutatenActivity.this, NoAlkZutatenActivity.class));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /*  */

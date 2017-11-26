@@ -70,6 +70,7 @@ public class ZutatAdapter extends RecyclerView.Adapter<ZutatAdapter.ZutatViewHol
 
 
 
+
     @Override
     public ZutatViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         // Hole das Layout für die Row
