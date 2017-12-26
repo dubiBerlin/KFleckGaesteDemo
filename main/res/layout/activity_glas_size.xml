@@ -7,24 +7,33 @@
     android:layout_margin="10dp"
     tools:context="com.dubravko.kfleck.kfleckdemo.GlasSizeActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:text="Wähle eine Glasgröße"
+        android:layout_margin="25dp"
+        />
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="0.3er Glas"
+        android:text="0.3 Liter"
         android:id="@+id/glas03LBtn"
         android:layout_gravity="center_horizontal" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Halber Liter"
+        android:text="0.5 Liter"
         android:id="@+id/glas05LBtn"
         android:layout_gravity="center_horizontal" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Liter Glas"
+        android:text="1 Liter"
         android:id="@+id/glas1LBtn"
         android:layout_gravity="center_horizontal" />
 </LinearLayout>

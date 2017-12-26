@@ -1,21 +1,22 @@
 package com.dubravko.kfleck.kfleckdemo.model;
 
 /**
- * Created by dp on 14.11.2017.
+ * Created by dp on 03.12.2017.
  */
-public class Zutat {
+public class GewaehlteZutat {
 
     private String name;
-    private String liter;
-    private int status;
+    private double liter;
     private int position;
     private String activityName;
 
-    public Zutat(){}
+    public GewaehlteZutat(){}
 
-    public Zutat(String name, String liter) {
+    public GewaehlteZutat(String name, double liter, int position, String activityName) {
         this.name = name;
         this.liter = liter;
+        this.position = position;
+        this.activityName = activityName;
     }
 
     public String getName() {
@@ -26,28 +27,12 @@ public class Zutat {
         this.name = name;
     }
 
-    public String getLiter() {
+    public double getLiter() {
         return liter;
     }
 
-    public void setLiter(String liter) {
+    public void setLiter(double liter) {
         this.liter = liter;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public String getActivityName() {
-        return activityName;
-    }
-
-    public void setActivityName(String activityName) {
-        this.activityName = activityName;
     }
 
     public int getPosition() {
@@ -56,5 +41,13 @@ public class Zutat {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
     }
 }

@@ -1,0 +1,15 @@
+
+Plan:
+- In Fragmente umbauen
+-
+
+
+
+
+Problem:
+
+- In der ActionBar in NoAlkZutatenActivity Titel ersetzen mit => 0.5/0.3
+  0.5 ist gewählter Alkoholanteil in der vorherigen AlkActivity
+
+- navigiert man von noalk zurück zur alkactivity und wieder zurück zur noAlk
+  sind die gesetzten Sterne nicht mehr gelb

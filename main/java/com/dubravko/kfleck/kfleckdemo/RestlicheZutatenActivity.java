@@ -5,11 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dubravko.kfleck.kfleckdemo.model.Zutat;
+import com.dubravko.kfleck.kfleckdemo.shared.Helper;
+import com.dubravko.kfleck.kfleckdemo.shared.SharedPreferenceClass;
 import com.dubravko.knutschfleck.knutschfleckdemo.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -19,106 +20,108 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class NoAlkZutatenActivity extends AppCompatActivity {
+public class RestlicheZutatenActivity extends AppCompatActivity {
+
 
     private FirebaseAuth mAuth;
     private DatabaseReference mStatusDB;
 
     // everything for RecyclerView
     private RecyclerView recyclerView;
-    private List<Zutat> zutaten;
-    private NoAlkZutatAdapter adapter;
+    private List<Zutat> list;
+    private RestlicheZutatenAdapter adapter;
+    private SharedPreferenceClass spc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_no_alk_zutaten);
+        setContentView(R.layout.activity_restliche_zutaten);
 
-        mStatusDB = FirebaseDatabase.getInstance().getReference().child("NoAlkohol");
+        spc = new SharedPreferenceClass(this);
 
-        // RecyclerView settings
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView = (RecyclerView)findViewById(R.id.noAlkListeRecylerView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
+        mStatusDB = FirebaseDatabase.getInstance().getReference().child("Zutaten");
 
+        // RecyclerView
+        recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
+        recyclerView.hasFixedSize(); // Every item has a fixed size
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        zutaten = new ArrayList<Zutat>();
+        list = new ArrayList<Zutat>();
+
         getList();
-       // getList2();
 
+        adapter = new RestlicheZutatenAdapter(this, list);
 
-        //zutaten = getStatusesList();
-        adapter = new NoAlkZutatAdapter(zutaten,getSupportActionBar(), this);
-        recyclerView.setItemViewCacheSize(zutaten.size());
         recyclerView.setAdapter(adapter);
     }
 
 
-    // ActionBar
-    // We add the next button
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        HashMap<Integer, Zutat> map = spc.getRestZutatHashMap();//Helper.getZutatenListFromHashMap(spc.getRestZutatHashMap(), list);
+
+        list = Helper.getZutatenListFromHashMap(map);
+        adapter = new RestlicheZutatenAdapter(this, map, list );
+        recyclerView.setAdapter(adapter);
+    }
+
+
+
+    /**************
+     * ACTIONBAR
+     *************/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.next_button_layout, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
 
         switch(item.getItemId()){
             case R.id.action_bar_next_btn:
-                startActivity(new Intent(NoAlkZutatenActivity.this, RestlicheZutatenActivity.class));
+                startActivity(new Intent(RestlicheZutatenActivity.this, BestellungUebersichtActivity.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    /*  */
+
+
     private void getList(){
         mStatusDB.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String key = dataSnapshot.getKey();
-                Zutat zutat = dataSnapshot.child(key).getValue(Zutat.class);
-                Log.i("FETCH----key: ",key);
 
 
+                //String key = dataSnapshot.getKey();
+                Zutat zutat = new Zutat();// dataSnapshot.child(key).getValue(RestlicheZutat.class);
 
+                //String value = dataSnapshot.getValue().toString();
 
-                //Zutat zutat = dataSnapshot.getValue(Zutat.class);
-                // Log.i("FETCH----zutat: ",key+" "+zutat.getName()+" "+zutat.getLiter() );
+                //Log.i("FETCH---KeyVALUE: ",value+" "+key+" "+dataSnapshot.getChildren().toString());
 
                 int i = 0;
 
-                Zutat zt = new Zutat();
-                zt.setActivityName(getString(R.string.noAlkZutatActivity));
-
                 for(DataSnapshot snapshot:dataSnapshot.getChildren()){
 
-                    String childKEy = snapshot.getKey();
                     String value = snapshot.getValue().toString();
-                    if(i==0){
-                        zt.setLiter(value);
-                    }else{
-                        zt.setName(value);
-                    }
 
-
-                    Log.i("FETCH----childKEy: ",childKEy+" : "+value+" "+i);
-
-
-                    i = i+1;
-
+                    zutat.setName(value);
+                    zutat.setActivityName(getString(R.string.restlicheZutatActivity));
+                    zutat.setLiter("");
+                    System.out.println(i+"______ChildValue: "+value);
+                    i++;
                 }
 
-                zutaten.add(zt);
+
+                list.add(zutat);
                 adapter.notifyDataSetChanged();
             }
 
@@ -143,6 +146,8 @@ public class NoAlkZutatenActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
 
 }

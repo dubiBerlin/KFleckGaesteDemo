@@ -6,4 +6,10 @@
     <string name="kfleck_preference_file_key">kFleck_shared_preference</string>
     <string name="shared_glas_size">glas_size</string>
     <string name="shared_amount_liter">amount_liter</string>
+    <string name="shared_alcohol_zutaten_hashlist">shared_alcohol_zutaten_hashlist</string>
+    <string name="shared_none_alcohol_zutaten_hashlist">shared_none_alcohol_zutaten_hashlist</string>
+    <string name="shared_restliche_zutaten_hashlist">shared_restliche_zutaten_hashlist</string>
+    <string name="restlicheZutatActivity">RestlicheZutatActivity</string>
+    <string name="alkZutatActivity">AlkZutatActivity</string>
+    <string name="noAlkZutatActivity">NoAlkZutatActivity</string>
 </resources>

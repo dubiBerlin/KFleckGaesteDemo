@@ -29,15 +29,12 @@ public class AlkZutatenActivity extends AppCompatActivity {
     // everything for RecyclerView
     private RecyclerView recyclerView;
     private List<Zutat> zutaten;
-    private ZutatAdapter adapter;
+    private AlkZutatAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alk_zutaten);
-
-        //getSupportActionBar().setDisplayShowTitleEnabled(false);
-        //getSupportActionBar().setTitle("Was los ja?");
 
         mStatusDB = FirebaseDatabase.getInstance().getReference().child("Alkohol");
 
@@ -55,18 +52,35 @@ public class AlkZutatenActivity extends AppCompatActivity {
         getList();
         getList2();
 
+        Log.d("AlkZutatenActivity","\n\n________________AlkZutatenActivity_onCreate______________\n\n");
+
 
         //zutaten = getStatusesList();
-        adapter = new ZutatAdapter(zutaten,getSupportActionBar(), this);
+        adapter = new AlkZutatAdapter(zutaten,getSupportActionBar(), this);
         recyclerView.setItemViewCacheSize(zutaten.size());
         recyclerView.setAdapter(adapter);
 
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        System.out.println("***********************GlasSizeActivity -> onRestart()");
+        Log.i("AlkZutatenActivity","****************** -> onRestart()");
+
+        //zutaten = new ArrayList<Zutat>();
+        //getList3();
+
+    }
+
+
     private void getList2(){
         for(int i = 1; i < 6; i++){
-            Zutat zutat = new Zutat("ZapZarap"+i, "0.0"+i);
+            Zutat zutat = new Zutat("Alkohol "+i, "0.0"+i);
+            zutat.setActivityName(getString(R.string.alkZutatActivity));
             zutaten.add(zutat);
+
         }
     }
 
@@ -106,7 +120,7 @@ public class AlkZutatenActivity extends AppCompatActivity {
                 int i = 0;
 
                 Zutat zt = new Zutat();
-
+                zt.setActivityName(getString(R.string.alkZutatActivity));
                 for(DataSnapshot snapshot:dataSnapshot.getChildren()){
 
                     String childKEy = snapshot.getKey();

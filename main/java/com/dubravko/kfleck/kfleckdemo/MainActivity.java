@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.dubravko.kfleck.kfleckdemo.shared.SharedPreferenceClass;
 import com.dubravko.knutschfleck.knutschfleckdemo.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,6 +21,9 @@ public class MainActivity extends AppCompatActivity {
         // The two buttons
         Button withAlkBtn = (Button)findViewById(R.id.setAlcBtn);
         Button withoutAlkBtn = (Button)findViewById(R.id.setNoAlcBtn);
+
+        SharedPreferenceClass spc = new SharedPreferenceClass(this);
+        spc.setCurrentAmountChoosenLiters("0");
 
         withAlkBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {

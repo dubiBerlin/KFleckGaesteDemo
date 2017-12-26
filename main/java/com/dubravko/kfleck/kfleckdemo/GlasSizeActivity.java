@@ -1,7 +1,6 @@
 package com.dubravko.kfleck.kfleckdemo;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,10 +12,55 @@ import com.dubravko.knutschfleck.knutschfleckdemo.R;
 public class GlasSizeActivity extends AppCompatActivity {
 
     // we will save the choosen amount of liters by the user and the glas size
-    private SharedPreferences sharedpreferences;
+    private SharedPreferenceClass sharedpreferences;
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        System.out.println("***********************GlasSizeActivity -> onStart()");
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        System.out.println("***********************GlasSizeActivity -> onResume()");
+        if(sharedpreferences!=null){
+            sharedpreferences.setCurrentAmountChoosenLiters("0");
+            sharedpreferences.updateCurrentAmountChoosenLiters("0");
+            System.out.println("***********************GlasSizeActivity -> onResume()   ==> sharedpreferences!=null");
+        }
+
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        System.out.println("***********************GlasSizeActivity -> onPause()");
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        System.out.println("***********************GlasSizeActivity -> onDestroy()");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        System.out.println("***********************GlasSizeActivity -> onRestart()");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("***********************GlasSizeActivity -> onCreate()");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_glas_size);
 
@@ -25,12 +69,14 @@ public class GlasSizeActivity extends AppCompatActivity {
         Button glas1Btn = (Button)findViewById(R.id.glas1LBtn);
 
         // Call for saving glassize
-        final SharedPreferenceClass spc = new SharedPreferenceClass(getBaseContext());
+        sharedpreferences = new SharedPreferenceClass(getBaseContext());
+
+        sharedpreferences.clearSharedPreference();
 
         glas03Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                spc.setGlasSize("0.3");
+                sharedpreferences.setGlasSize("0.3");
                 startActivity(new Intent(GlasSizeActivity.this, AlkZutatenActivity.class));
             }
         });
@@ -38,7 +84,7 @@ public class GlasSizeActivity extends AppCompatActivity {
         glas05Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                spc.setGlasSize("0.5");
+                sharedpreferences.setGlasSize("0.5");
                 startActivity(new Intent(GlasSizeActivity.this, AlkZutatenActivity.class));
             }
         });
@@ -46,7 +92,7 @@ public class GlasSizeActivity extends AppCompatActivity {
         glas1Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                spc.setGlasSize("1");
+                sharedpreferences.setGlasSize("1");
                 startActivity(new Intent(GlasSizeActivity.this, AlkZutatenActivity.class));
             }
         });

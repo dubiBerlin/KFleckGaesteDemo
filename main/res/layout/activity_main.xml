@@ -14,7 +14,9 @@
         android:text="Alkoholischer Cocktail"
         android:layout_centerHorizontal="true"
         android:id="@+id/setAlcBtn"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/button_state"
+        />
 
     <Button
         android:layout_width="match_parent"
@@ -23,5 +25,6 @@
         android:id="@+id/setNoAlcBtn"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/button_state" />
 </LinearLayout>
