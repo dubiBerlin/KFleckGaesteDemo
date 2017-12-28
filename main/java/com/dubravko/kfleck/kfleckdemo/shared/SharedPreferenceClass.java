@@ -151,12 +151,12 @@ public class SharedPreferenceClass {
      *      RESTLICHE ZUTATEN       *
      *                              *
      ********************************/
-    public void setRestZutatenList(String list){
+    public void setRestZutatenHashMap(String list){
         editor.putString(context.getString(R.string.shared_restliche_zutaten_hashlist), list);
         editor.commit();
     }
 
-    public void updateRestZutatenList(String list){
+    public void updateRestZutatenHashMap(String list){
         editor.putString(context.getString(R.string.shared_restliche_zutaten_hashlist), list);
         editor.apply();
     }
@@ -188,7 +188,7 @@ public class SharedPreferenceClass {
         zutat.setStatus(status);
         hashMap.put(pos,zutat);
 
-        updateRestZutatenList(Helper.convertObjectToString(hashMap));
+        updateRestZutatenHashMap(Helper.convertObjectToString(hashMap));
     }
 
 }

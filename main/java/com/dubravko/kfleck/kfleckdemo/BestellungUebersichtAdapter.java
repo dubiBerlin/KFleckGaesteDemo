@@ -78,6 +78,15 @@ public class BestellungUebersichtAdapter extends RecyclerView.Adapter<Bestellung
                     }
                 }
 
+                if(zutat.getLiter()!="" && zutat.getLiter()!=null){
+
+                    double liter =  Double.valueOf(spc.getCurrentAmountChoosenLiters());
+
+                    liter = Helper.roundDouble(liter - Double.valueOf(zutat.getLiter()));
+
+                    spc.updateCurrentAmountChoosenLiters(String.valueOf(liter));
+
+                }
 
             }
         });

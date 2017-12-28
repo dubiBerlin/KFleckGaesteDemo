@@ -33,8 +33,18 @@ public class RestlicheZutatenAdapter  extends RecyclerView.Adapter<RestlicheZuta
         this.listItems = listItem;
         mapStarBtns = new HashMap<Integer, Zutat>();
         spc = new SharedPreferenceClass(context);
-        spc.setRestZutatenList(Helper.convertObjectToString(mapStarBtns));
+        //spc.setRestZutatenHashMap(Helper.convertObjectToString(mapStarBtns));
     }
+
+
+    public RestlicheZutatenAdapter(Context context, HashMap<Integer, Zutat> map){
+        this.context = context;
+        mapStarBtns = map;
+        spc = new SharedPreferenceClass(context);
+        spc.setRestZutatenHashMap(Helper.convertObjectToString(mapStarBtns));
+        Helper.printMap(mapStarBtns);
+    }
+
 
 
     public RestlicheZutatenAdapter( Context context, HashMap<Integer, Zutat> map, List list){
@@ -44,6 +54,7 @@ public class RestlicheZutatenAdapter  extends RecyclerView.Adapter<RestlicheZuta
         System.out.println("________________RestlicheZutatenAdapter after reStart");
         Helper.printMap(mapStarBtns);
         spc = new SharedPreferenceClass(context);
+        spc.setRestZutatenHashMap(Helper.convertObjectToString(map));
     }
 
     @Override
@@ -54,20 +65,18 @@ public class RestlicheZutatenAdapter  extends RecyclerView.Adapter<RestlicheZuta
         return new ViewHolder(v);
     }
 
+
+
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        Zutat zutat = listItems.get(position);
+        //listItems.get(position);
 
-        if(!mapStarBtns.containsKey(position)){
-            System.out.println("________________"+zutat.getName()+" "+zutat.getLiter()+" pos: "+position);
-            zutat.setStatus(-1);
-            zutat.setPosition(position);
-            mapStarBtns.put(position, zutat);
-            spc.updateRestZutatenList(Helper.convertObjectToString(mapStarBtns));
-        }
-        //printMap(mapStarBtns);
-        System.out.println("________________"+zutat.getName()+" "+zutat.getLiter()+" pos: "+position);
+        Zutat zutat = mapStarBtns.get(position);
+
+        System.out.println("RestZutatenAdapter => onBindViewHolder________________"+zutat.getName()+" "+zutat.getLiter()+" pos: "+position);
+
+
 
 
         if(mapStarBtns.get(position).getStatus()==-1){
@@ -100,16 +109,19 @@ public class RestlicheZutatenAdapter  extends RecyclerView.Adapter<RestlicheZuta
                     //holder.name.setTextColor();
                 }
 
-                spc.updateRestZutatenList(Helper.convertObjectToString(mapStarBtns));
+                spc.updateRestZutatenHashMap(Helper.convertObjectToString(mapStarBtns));
             }
         });
 
     }
 
+
     @Override
     public int getItemCount() {
-        return listItems.size();
+        return mapStarBtns.size();
     }
+
+
 
     /*
         * ViewHolder class

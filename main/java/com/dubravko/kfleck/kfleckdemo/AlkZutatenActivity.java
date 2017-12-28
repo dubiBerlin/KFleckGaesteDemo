@@ -10,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dubravko.kfleck.kfleckdemo.model.Zutat;
+import com.dubravko.kfleck.kfleckdemo.shared.Helper;
+import com.dubravko.kfleck.kfleckdemo.shared.SharedPreferenceClass;
 import com.dubravko.knutschfleck.knutschfleckdemo.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -18,8 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class AlkZutatenActivity extends AppCompatActivity {
 
@@ -28,7 +29,9 @@ public class AlkZutatenActivity extends AppCompatActivity {
 
     // everything for RecyclerView
     private RecyclerView recyclerView;
-    private List<Zutat> zutaten;
+    //private List<Zutat> zutaten;
+    private HashMap<Integer, Zutat> map;
+    private SharedPreferenceClass spc;
     private AlkZutatAdapter adapter;
 
     @Override
@@ -48,16 +51,29 @@ public class AlkZutatenActivity extends AppCompatActivity {
         linearLayoutManager.setStackFromEnd(true);
 
 
-        zutaten = new ArrayList<Zutat>();
-        getList();
-        getList2();
+        spc = new SharedPreferenceClass(this);
+
+
+        if(spc.getAlcoholZutatHashMap()!=null && spc.getAlcoholZutatHashMap().size()>0){
+            map = spc.getAlcoholZutatHashMap();
+        }else{
+            map = new HashMap<Integer, Zutat>();
+            spc.setAlcoholZutatenList(Helper.convertObjectToString(map));
+            // Call data from Firebase database
+            fillMapFromFirebase();
+        }
+        //zutaten = new ArrayList<Zutat>();
+        //getList();
+        //getList2();
+
+        // Daten von Firebase holen
 
         Log.d("AlkZutatenActivity","\n\n________________AlkZutatenActivity_onCreate______________\n\n");
 
 
         //zutaten = getStatusesList();
-        adapter = new AlkZutatAdapter(zutaten,getSupportActionBar(), this);
-        recyclerView.setItemViewCacheSize(zutaten.size());
+        adapter = new AlkZutatAdapter(map ,getSupportActionBar(), this);
+        recyclerView.setItemViewCacheSize(map.size());
         recyclerView.setAdapter(adapter);
 
     }
@@ -66,23 +82,29 @@ public class AlkZutatenActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
 
-        System.out.println("***********************GlasSizeActivity -> onRestart()");
-        Log.i("AlkZutatenActivity","****************** -> onRestart()");
+        System.out.println("***********************AlkZutatenActivity -> onRestart()");
 
-        //zutaten = new ArrayList<Zutat>();
-        //getList3();
+        HashMap<Integer, Zutat> map = spc.getAlcoholZutatHashMap();
 
+        double currentLiterChoosen = Double.valueOf(spc.getCurrentAmountChoosenLiters());
+
+        getSupportActionBar().setTitle(currentLiterChoosen+" | "+spc.getGlasSize());
+
+
+        adapter = new AlkZutatAdapter(map ,getSupportActionBar(), this);
+        recyclerView.setItemViewCacheSize(map.size());
+        recyclerView.setAdapter(adapter);
     }
 
 
-    private void getList2(){
+/*    private void getList2(){
         for(int i = 1; i < 6; i++){
             Zutat zutat = new Zutat("Alkohol "+i, "0.0"+i);
             zutat.setActivityName(getString(R.string.alkZutatActivity));
             zutaten.add(zutat);
 
         }
-    }
+    }*/
 
     // ActionBar
     @Override
@@ -102,66 +124,61 @@ public class AlkZutatenActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /*  */
-    private void getList(){
+    int position = 0;
+    private void fillMapFromFirebase(){
         mStatusDB.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String key = dataSnapshot.getKey();
-                Zutat zutat = dataSnapshot.child(key).getValue(Zutat.class);
-                Log.i("FETCH----key: ",key);
 
+                Log.i("count ",position+" ");
+                //String key = dataSnapshot.getKey();
+                Zutat zutat = new Zutat();// dataSnapshot.child(key).getValue(RestlicheZutat.class);
+                zutat.setPosition(position);
+                //String value = dataSnapshot.getValue().toString();
 
-
-
-                //Zutat zutat = dataSnapshot.getValue(Zutat.class);
-               // Log.i("FETCH----zutat: ",key+" "+zutat.getName()+" "+zutat.getLiter() );
+                //Log.i("FETCH---KeyVALUE: ",value+" "+key+" "+dataSnapshot.getChildren().toString());
 
                 int i = 0;
 
-                Zutat zt = new Zutat();
-                zt.setActivityName(getString(R.string.alkZutatActivity));
                 for(DataSnapshot snapshot:dataSnapshot.getChildren()){
 
-                    String childKEy = snapshot.getKey();
                     String value = snapshot.getValue().toString();
+
                     if(i==0){
-                        zt.setLiter(value);
+                        zutat.setLiter(value);
                     }else{
-                        zt.setName(value);
+                        zutat.setName(value);
                     }
 
-
-                    Log.i("FETCH----childKEy: ",childKEy+" : "+value+" "+i);
-
-
-                    i = i+1;
-
+                    System.out.println(i+"NoAlkActivity => fillMapFromFirebase ______ChildValue: "+value);
+                    i++;
                 }
 
-                zutaten.add(zt);
+                zutat.setActivityName(getString(R.string.alkZutatActivity));
+                zutat.setStatus(-1);
+                zutat.setPosition(position);
+
+                map.put(position, zutat);
+
+                spc.updateAlcoholZutatenList(Helper.convertObjectToString(map));
+
+
+                position++;
+                //list.add(zutat);
                 adapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
+            public void onChildRemoved(DataSnapshot dataSnapshot) { }
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
     }
 }

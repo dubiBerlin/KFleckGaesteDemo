@@ -10,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dubravko.kfleck.kfleckdemo.model.Zutat;
+import com.dubravko.kfleck.kfleckdemo.shared.Helper;
+import com.dubravko.kfleck.kfleckdemo.shared.SharedPreferenceClass;
 import com.dubravko.knutschfleck.knutschfleckdemo.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -18,8 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class NoAlkZutatenActivity extends AppCompatActivity {
 
@@ -28,13 +29,16 @@ public class NoAlkZutatenActivity extends AppCompatActivity {
 
     // everything for RecyclerView
     private RecyclerView recyclerView;
-    private List<Zutat> zutaten;
+    //private List<Zutat> zutaten;
+    private HashMap<Integer, Zutat> map;
+    private SharedPreferenceClass spc;
     private NoAlkZutatAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_no_alk_zutaten);
+
 
         mStatusDB = FirebaseDatabase.getInstance().getReference().child("NoAlkohol");
 
@@ -47,18 +51,53 @@ public class NoAlkZutatenActivity extends AppCompatActivity {
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
 
+        spc = new SharedPreferenceClass(this);
 
-        zutaten = new ArrayList<Zutat>();
-        getList();
+
+        if(spc.getNoneAlcoholZutatHashMap()!=null && spc.getNoneAlcoholZutatHashMap().size()>0){
+            map = spc.getNoneAlcoholZutatHashMap();
+        }else{
+            map = new HashMap<Integer, Zutat>();
+            spc.setNoneAlcoholZutatenList(Helper.convertObjectToString(map));
+            fillMapFromFirebase();
+        }
+
+
+        //zutaten = new ArrayList<Zutat>();
+
+
+        //getList();
        // getList2();
 
 
-        //zutaten = getStatusesList();
-        adapter = new NoAlkZutatAdapter(zutaten,getSupportActionBar(), this);
-        recyclerView.setItemViewCacheSize(zutaten.size());
+
+        // Daten von Firebase holen
+
+        Helper.printMap(map);
+
+        adapter = new NoAlkZutatAdapter(map,getSupportActionBar(), this);
+        //adapter = new NoAlkZutatAdapter(zutaten,getSupportActionBar(), this);
+
+        recyclerView.setItemViewCacheSize(map.size());
         recyclerView.setAdapter(adapter);
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+
+        System.out.println("NoAlkActivity => Restart()");
+
+        HashMap<Integer, Zutat> map = spc.getNoneAlcoholZutatHashMap();//Helper.getZutatenListFromHashMap(spc.getRestZutatHashMap(), list);
+
+        System.out.println("Random value "+map.get(0).getName()+" position: "+map.get(0).getPosition());
+
+        //list = Helper.getZutatenListFromHashMap(map);
+        adapter = new NoAlkZutatAdapter(map,getSupportActionBar(), this);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
 
     // ActionBar
     // We add the next button
@@ -80,8 +119,71 @@ public class NoAlkZutatenActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /*  */
-    private void getList(){
+
+    int position = 0;
+
+    private void fillMapFromFirebase(){
+        mStatusDB.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                Log.i("count ",position+" ");
+                //String key = dataSnapshot.getKey();
+                Zutat zutat = new Zutat();// dataSnapshot.child(key).getValue(RestlicheZutat.class);
+                zutat.setPosition(position);
+                //String value = dataSnapshot.getValue().toString();
+
+                //Log.i("FETCH---KeyVALUE: ",value+" "+key+" "+dataSnapshot.getChildren().toString());
+
+                int i = 0;
+
+                for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+
+                    String value = snapshot.getValue().toString();
+
+                    if(i==0){
+                        zutat.setLiter(value);
+                    }else{
+                        zutat.setName(value);
+                    }
+
+                    System.out.println(i+"NoAlkActivity => fillMapFromFirebase ______ChildValue: "+value);
+                    i++;
+                }
+
+                zutat.setActivityName(getString(R.string.noAlkZutatActivity));
+                zutat.setStatus(-1);
+                zutat.setPosition(position);
+
+                map.put(position, zutat);
+
+                spc.updateNoneAlcoholZutatenList(Helper.convertObjectToString(map));
+
+
+                position++;
+                //list.add(zutat);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) { }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+    }
+
+
+
+
+
+ /*   private void getList(){
         mStatusDB.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -142,7 +244,7 @@ public class NoAlkZutatenActivity extends AppCompatActivity {
 
             }
         });
-    }
+    }*/
 
 
 }

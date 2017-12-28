@@ -6,8 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.dubravko.kfleck.kfleckdemo.model.Zutat;
+import com.dubravko.kfleck.kfleckdemo.shared.Helper;
 import com.dubravko.kfleck.kfleckdemo.shared.SharedPreferenceClass;
 import com.dubravko.knutschfleck.knutschfleckdemo.R;
+
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +28,11 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferenceClass spc = new SharedPreferenceClass(this);
         spc.setCurrentAmountChoosenLiters("0");
+
+        spc.setAlcoholZutatenList(Helper.convertObjectToString(new HashMap<Integer, Zutat>()));
+        spc.setNoneAlcoholZutatenList(Helper.convertObjectToString(new HashMap<Integer, Zutat>()));
+        spc.setRestZutatenHashMap(Helper.convertObjectToString(new HashMap<Integer, Zutat>()));
+
 
         withAlkBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -45,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //
+
     }
 
     private void sendToNExtActivity(String value){
@@ -54,4 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
         startActivity(intent);
     }
+
+
 }

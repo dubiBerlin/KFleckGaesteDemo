@@ -27,12 +27,7 @@ public class GlasSizeActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        System.out.println("***********************GlasSizeActivity -> onResume()");
-        if(sharedpreferences!=null){
-            sharedpreferences.setCurrentAmountChoosenLiters("0");
-            sharedpreferences.updateCurrentAmountChoosenLiters("0");
-            System.out.println("***********************GlasSizeActivity -> onResume()   ==> sharedpreferences!=null");
-        }
+
 
     }
 
