@@ -33,7 +33,9 @@ public class BestellungUebersichtAdapter extends RecyclerView.Adapter<Bestellung
         this.list = gewaehlteZutaten;
         this.context = context;
         spc = new SharedPreferenceClass(context);
+
     }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -65,6 +67,7 @@ public class BestellungUebersichtAdapter extends RecyclerView.Adapter<Bestellung
                 notifyItemRemoved(position);
                 System.out.println("onClick");
                 System.out.println("Name: "+zutat.getName()+"\nStatus"+zutat.getStatus());
+
                 if(activityName.equals(context.getString(R.string.alkZutatActivity))){
                     spc.updateStatusInAlcoholZutatHashMap(pos, -1);
                     Helper.printMap(spc.getAlcoholZutatHashMap());
@@ -88,6 +91,7 @@ public class BestellungUebersichtAdapter extends RecyclerView.Adapter<Bestellung
 
                 }
 
+                spc.updateBestellungUebersichtList(Helper.convertObjectToString(list));
             }
         });
 
@@ -98,9 +102,6 @@ public class BestellungUebersichtAdapter extends RecyclerView.Adapter<Bestellung
         return list.size();
     }
 
-    public void deleteFromHashMap(){
-
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

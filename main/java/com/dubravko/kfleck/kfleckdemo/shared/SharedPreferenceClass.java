@@ -8,7 +8,9 @@ import com.dubravko.knutschfleck.knutschfleckdemo.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by dp on 19.11.2017.
@@ -189,6 +191,35 @@ public class SharedPreferenceClass {
         hashMap.put(pos,zutat);
 
         updateRestZutatenHashMap(Helper.convertObjectToString(hashMap));
+    }
+
+
+    /*********************************
+     *                               *
+     *      BESTELLUNG ÜBERSICHT     *
+     *                               *
+     *********************************/
+    public void setBestellungUebersichtList(String list){
+        editor.putString(context.getString(R.string.shared_bestellung_uebersicht_list), list);
+        editor.commit();
+    }
+
+    public void updateBestellungUebersichtList(String list){
+        editor.putString(context.getString(R.string.shared_bestellung_uebersicht_list), list);
+        editor.apply();
+    }
+
+    public String getBestellungUebersichtListAsString(){
+        return sharedPref.getString(context.getString(R.string.shared_bestellung_uebersicht_list), null);
+    }
+
+    public List<Zutat> getBestellungUebersichtArrayList(){
+        String arrayList = getBestellungUebersichtListAsString();
+        Gson gson = new Gson();
+        java.lang.reflect.Type type = new TypeToken<ArrayList<Zutat>>(){}.getType();
+
+        ArrayList<Zutat> list = gson.fromJson(arrayList, type);
+        return list;
     }
 
 }
